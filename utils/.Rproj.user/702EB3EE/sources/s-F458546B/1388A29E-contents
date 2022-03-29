@@ -1,0 +1,71 @@
+library("tidyverse")
+library("data.table")
+library("glue")
+
+# turn off warnings
+options(warn = -1)
+
+# paths
+result_path = "../results/bedtools/"
+folder_name = "sign_diff_regions"
+
+# create a directory in bedtools folder
+dir.create(glue("{result_path}{folder_name}"), showWarnings = TRUE, recursive = FALSE, mode = "0777")
+
+fc_path = "../results/edgeR/"
+
+# fold change tables
+fc_tables = list.files(fc_path, full.names = FALSE, pattern = "*_fc_table.tsv")
+# bed files
+beds = list.files(glue("{result_path}/{folder_name}"), full.names = FALSE, pattern = "*bed")
+
+# making bed files from log fold change tables
+# only significant regions are kept (fc = 2, p = 0.05)
+make_bed = function(tsv,
+                    fc = 2,
+                    p_value = 0.05) {
+  fc_table = fread(glue("{fc_path}{tsv}"))
+  
+  sign = fc_table %>%
+    filter(abs(logFC) >= fc & PValue < p_value) %>%
+    separate(V1, "_", into = c("V1", "V2", "V3")) %>%
+    mutate(V2 = as.numeric(V2), V3 = as.numeric(V3)) %>%
+    na.omit() %>% 
+    select(V1, V2, V3, logFC)
+  
+  filename = str_split(tsv, ".tsv")[[1]][1]
+  
+  write.table(
+    sign,
+    glue("{result_path}{folder_name}/{filename}.bed"),
+    col.names = FALSE,
+    row.names = FALSE,
+    quote = FALSE,
+    sep = "\t"
+  )
+  
+}
+
+# loop over tsv files
+sapply(fc_tables, make_bed)
+
+# collect bed files
+beds = list.files(glue("{result_path}/{folder_name}"), full.names = FALSE, pattern = "*bed")
+# intersect bed files with ChromHMM regions
+bedtools_inersect = function(bed_a = "../data/bed/ChromHMM_E008_15_coreMarks_hg38lift_noblock_fullnames.bed",
+                             bed_b) {
+  filename = str_split(bed_b, "_fc_table.bed")[[1]][1]
+  
+  print(glue("bedtools intersect for {bed_a} and {bed_b}"))
+  system(
+    glue(
+      "bedtools intersect -a {bed_a} -b {result_path}{folder_name}/{bed_b} -bed > {result_path}{folder_name}/{filename}_chromhmm_int.bed"
+    )
+  )
+  print(glue("bedtools intersect is done!"))
+  return(filename)
+  
+}
+
+# loop over bed files
+sapply(beds, bedtools_inersect, bed_a = "../data/bed/ChromHMM_E008_15_coreMarks_hg38lift_noblock_fullnames.bed")

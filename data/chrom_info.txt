@@ -1,0 +1,9 @@
+sample	status
+LT2e	XX
+975	XX
+980	XX
+401	XX
+WA14	XY
+983a	XY
+1001	XY
+KI001	XY

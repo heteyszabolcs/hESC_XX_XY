@@ -1,0 +1,14 @@
+result_folder = "../results/bedtools/sign_diff_regions/"
+bed_file = "H3K27Ac_XX_XY_10kbp_mscaled_chromhmm_fc_table_annot"
+bed_data = fread(glue("{result_folder}{bed_file}.tsv"),
+                 header = TRUE,
+                 quote = FALSE)
+
+bed_data = bed_data %>% select(fold_change = starts_with("PeakID"),
+                               p_value = "Peak Score",
+                               Chr,
+                               Start,
+                               End,
+                               "Distance to TSS",
+                               "Gene Name"
+) %>% arrange(desc(fold_change))

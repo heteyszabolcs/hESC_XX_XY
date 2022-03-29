@@ -1,0 +1,1 @@
+annot = fread(glue("{result_folder}H2AK119Ub_XX_XY_2kbp_fc_table_annot.tsv"), header = TRUE, quote = FALSE)

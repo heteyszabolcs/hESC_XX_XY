@@ -1,0 +1,9 @@
+# big files
+*.bw
+*.bed
+*.csv
+*.csv.gz
+*.tsv
+*.tsv.gz
+*.xlsx
+*.gtf

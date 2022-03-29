@@ -1,0 +1,27 @@
+{
+    "id": "CC90502D",
+    "path": "C:/Szabolcs/Science/Karolinska/Data/Carmen/hESC_minute_XX-XY/utils/edgeR_unscaled.R",
+    "project_path": "edgeR_unscaled.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1648032976676.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "152,3",
+        "scrollLine": "134"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1648042497,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1648042497702,
+    "read_only": false,
+    "read_only_alternatives": []
+}
